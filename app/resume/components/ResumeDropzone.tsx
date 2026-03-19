@@ -8,8 +8,7 @@ import {
 } from "@/app/resume/lib/redux/local-storage";
 import { type ShowForm, initialSettings } from "@/app/resume/lib/redux/settingsSlice";
 import { useRouter } from "next/navigation";
-import addPdfSrc from "public/assets/add-pdf.svg";
-import Image from "next/image";
+import { DocumentPlusIcon } from "@heroicons/react/24/outline";
 import { cx } from "@/app/resume/lib/cx";
 import { deepClone } from "@/app/resume/lib/deep-clone";
 
@@ -116,12 +115,9 @@ export const ResumeDropzone = ({
         )}
       >
         {!playgroundView && (
-          <Image
-            src={addPdfSrc}
-            className="mx-auto h-14 w-14"
-            alt="Add pdf"
+          <DocumentPlusIcon 
+            className="mx-auto h-14 w-14 text-gray-400"
             aria-hidden="true"
-            priority
           />
         )}
         {!hasFile ? (
