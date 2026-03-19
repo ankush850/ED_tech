@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  role          String         @default("student")
+  avatar        String?
+  bio           String?
+  createdAt     DateTime       @default(now())
+  password      String?
+  certificates  Certificate[]
+  comments      Comment[]
+  discussions   Discussion[]
+  enrollments   Enrollment[]
+  notifications Notification[]
+  progress      Progress[]
+  attempts      QuizAttempt[]
+}
+
+model Course {
+  id          String       @id @default(uuid())
+  title       String
+  description String
+  teacherId   String
+  thumbnail   String?
+  level       String       @default("Beginner")
+  category    String?
+  isPublished Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  enrollments Enrollment[]
+  liveClasses LiveClass[]
+  modules     Module[]
+}
+
+model Module {
+  id          String   @id @default(uuid())
+  courseId    String
+  title       String
+  description String?
+  order       Int      @default(0)
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Lesson {
+  id          String     @id @default(uuid())
+  moduleId    String
+  title       String
+  description String?
+  type        String     @default("VIDEO") // "VIDEO" or "POST"
+  videoUrl    String?
+  content     String?
+  order       Int        @default(0)
+  module      Module     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progress    Progress[]
+  quiz        Quiz?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Quiz {
+  id        String        @id @default(uuid())
+  lessonId  String        @unique
+  questions Question[]
+  lesson    Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  attempts  QuizAttempt[]
+}
+
+model Question {
+  id           String   @id @default(uuid())
+  quizId       String
+  text         String
+  options      String[]
+  correctIndex Int
+  order        Int      @default(0)
+  quiz         Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model QuizAttempt {
+  id        String   @id @default(uuid())
+  quizId    String
+  userId    String
+  score     Int
+  passed    Boolean
+  answers   Int[]
+  createdAt DateTime @default(now())
+  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Progress {
+  id         String   @id @default(uuid())
+  userId     String
+  lessonId   String
+  completed  Boolean  @default(false)
+  watchedSec Int      @default(0)
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
+  lesson     Lesson   @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+}
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  userId     String
+  courseId   String
+  enrolledAt DateTime @default(now())
+  course     Course   @relation(fields: [courseId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model Certificate {
+  id       String   @id @default(uuid())
+  userId   String
+  courseId String
+  title    String
+  issuedAt DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+model LiveClass {
+  id          String   @id @default(uuid())
+  courseId    String
+  title       String
+  description String?
+  scheduledAt DateTime
+  duration    Int      @default(60)
+  roomName    String   @unique
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Discussion {
+  id        String    @id @default(uuid())
+  userId    String
+  title     String
+  content   String
+  category  String    @default("General Discussion")
+  tags      String[]
+  isPinned  Boolean   @default(false)
+  isSolved  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id           String     @id @default(uuid())
+  discussionId String
+  userId       String
+  content      String
+  createdAt    DateTime   @default(now())
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
