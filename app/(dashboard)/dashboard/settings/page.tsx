@@ -119,7 +119,7 @@ export default function SettingsPage() {
                   </Field>
                   <Field>
                     <FieldLabel>Role</FieldLabel>
-                    <Input value={role === "teacher" ? "Instructor" : role === "admin" ? "Administrator" : "Student"} disabled />
+                    <Input value={role === "admin" ? "Administrator" : "Student"} disabled />
                   </Field>
                 </FieldGroup>
                 <div className="mt-6 flex justify-end">

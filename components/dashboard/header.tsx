@@ -60,12 +60,10 @@ export function DashboardHeader() {
             "hidden sm:flex capitalize font-medium",
             role === "admin"
               ? "bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-400"
-              : role === "teacher"
-              ? "bg-violet-100 text-violet-700 dark:bg-violet-950/50 dark:text-violet-400"
               : "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400"
           )}
         >
-          {role === "admin" ? "Admin" : role === "teacher" ? "Instructor" : "Student"}
+          {role === "admin" ? "Admin" : "Student"}
         </Badge>
 
         {/* Focus Mode Toggle */}

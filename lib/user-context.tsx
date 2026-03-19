@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react"
 
-export type UserRole = "student" | "teacher" | "admin"
+export type UserRole = "student" | "admin"
 
 interface UserContextValue {
   id: string

@@ -53,15 +53,7 @@ const studentNavItems = [
   { title: "Community", icon: Users, href: "/community" },
 ]
 
-const teacherNavItems = [
-  { title: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { title: "My Courses", icon: BookOpen, href: "/dashboard/courses" },
-  { title: "Create Course", icon: PlusCircle, href: "/instructor" },
-  { title: "Live Classes", icon: Video, href: "/live-classes" },
-  { title: "Students", icon: ClipboardList, href: "/community" },
-  { title: "Resume Builder", icon: FileText, href: "/resume/resume-builder" },
-  { title: "Analytics", icon: BarChart2, href: "/instructor" },
-]
+
 
 const adminNavItems = [
   { title: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
@@ -80,11 +72,7 @@ const studentSecondaryItems = [
   { title: "Instructor", icon: GraduationCap, href: "/instructor" },
 ]
 
-const teacherSecondaryItems = [
-  { title: "Notifications", icon: Bell, href: "/notifications" },
-  { title: "Messages", icon: MessageSquare, href: "/community" },
-  { title: "Settings", icon: Settings, href: "/dashboard/settings" },
-]
+
 
 const adminSecondaryItems = [
   { title: "Notifications", icon: Bell, href: "/notifications" },
@@ -96,8 +84,8 @@ export function DashboardSidebar() {
   const { role, name } = useUser()
   const { isFocusMode } = useFocusMode()
 
-  const mainItems = role === "admin" ? adminNavItems : role === "teacher" ? teacherNavItems : studentNavItems
-  const secondaryItems = role === "admin" ? adminSecondaryItems : role === "teacher" ? teacherSecondaryItems : studentSecondaryItems
+  const mainItems = role === "admin" ? adminNavItems : studentNavItems
+  const secondaryItems = role === "admin" ? adminSecondaryItems : studentSecondaryItems
 
   const initials = name
     .split(" ")
@@ -120,7 +108,7 @@ export function DashboardSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
-            {role === "admin" ? "Admin" : role === "teacher" ? "Instructor" : "Student"} Menu
+            {role === "admin" ? "Admin" : "Student"} Menu
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -168,8 +156,6 @@ export function DashboardSidebar() {
                       "text-xs font-semibold",
                       role === "admin"
                         ? "bg-rose-100 text-rose-700"
-                        : role === "teacher"
-                        ? "bg-violet-100 text-violet-700"
                         : "bg-blue-100 text-blue-700"
                     )}>
                       {initials}
@@ -178,7 +164,7 @@ export function DashboardSidebar() {
                   <div className="flex-1 text-left">
                     <p className="text-sm font-medium leading-none">{name}</p>
                     <p className="text-xs text-muted-foreground capitalize">
-                      {role === "admin" ? "Administrator" : role === "teacher" ? "Instructor" : "Student"}
+                      {role === "admin" ? "Administrator" : "Student"}
                     </p>
                   </div>
                   <ChevronUp className="h-4 w-4" />
